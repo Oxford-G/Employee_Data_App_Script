@@ -246,10 +246,93 @@ function editRecord() {
   }
 }
 
+// function to clear the user-form
 
+function clearForm() {
+  var myGoogleSheet=SpreadsheetApp.getActiveSpreadsheet();
 
+  var shUserForm=myGoogleSheet.getSheetByName("User Form");
 
+  var ui=SpreadsheetApp.getUi();
 
+  var response=ui.alert("Reset Confirmation", "Do you want to reset the User Form?", ui.ButtonSet.YES_NO);
+
+  if(response==ui.Button.NO) {
+    return; //exit
+  }
+
+  shUserForm.getRange("C4").clear();
+  shUserForm.getRange("C7").clear();
+  shUserForm.getRange("C9").clear();
+  shUserForm.getRange("C11").clear();
+  shUserForm.getRange("C13").clear();
+  shUserForm.getRange("C15").clear();
+  shUserForm.getRange("C17").clear();
+
+  // Assign default color
+
+  shUserForm.getRange("C4").setBackground('#ffffff');
+  shUserForm.getRange("C7").setBackground('#ffffff');
+  shUserForm.getRange("C9").setBackground('#ffffff');
+  shUserForm.getRange("C11").setBackground('#ffffff');
+  shUserForm.getRange("C13").setBackground('#ffffff');
+  shUserForm.getRange("C15").setBackground('#ffffff');
+  shUserForm.getRange("C17").setBackground('#ffffff');
+
+  return true;
+}
+
+// function to delete existing record
+
+function deleteRow() {
+  var myGoogleSheet=SpreadsheetApp.getActiveSpreadsheet();
+
+  var shUserForm=myGoogleSheet.getSheetByName("User Form");
+
+  var dataSheet=myGoogleSheet.getSheetByName("Database");
+
+  var ui=SpreadsheetApp.getUi();
+
+  var response=ui.alert("Delete", "Do you want to delete the record?", ui.ButtonSet.YES_NO);
+
+  if (response==ui.Button.NO) {
+    return; //exit
+  }
+
+  var str=shUserForm.getRange("C4").getValue();
+
+  var values=dataSheet.getDataRange().getValues();
+
+  var valuesFound=false;
+
+  for(i=0; i < values.length; i++) {
+    var rowValue=values[i];
+
+    if(rowValue[0]==str) {
+      var iRow=i+1
+
+      dataSheet.deleteRow(iRow)
+
+      ui.alert("Record deleted");
+
+      shUserForm.getRange("C4").clear();
+      shUserForm.getRange("C7").clear();
+      shUserForm.getRange("C9").clear();
+      shUserForm.getRange("C11").clear();
+      shUserForm.getRange("C13").clear();
+      shUserForm.getRange("C15").clear();
+      shUserForm.getRange("C17").clear();
+
+      valuesFound=true;
+
+      return;
+    }
+  }
+
+  if(valuesFound==false) {
+    ui.alert("No record found")
+  }
+}
 
 
 
